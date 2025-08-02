@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="/manifest.json">
+<script>
+if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/service-worker.js'); }
+</script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+         margin:0; background:#fff; text-align:center; color:#222; }
+  .splash { position:fixed; top:0; left:0; right:0; bottom:0; background:#fff;
+            display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:9999; }
+  .hidden { display:none; }
+  h2 { margin-top:20px; }
+  input, textarea { width:90%; padding:14px; margin:8px 0;
+                    border-radius:12px; border:1px solid #ddd; font-size:16px; }
+  button { background:#333; color:white; padding:14px;
+           border:none; border-radius:12px; font-weight:600; margin-top:12px;
+           width:94%; font-size:16px; }
+  #vin-preview { font-size:14px; color:#777; }
+</style>
+</head>
+<body>
+<div class="splash" id="splash">
+  <img src="/static/gateway_logo.png" width="120"><br>
+  <h2 id="greeting">Good Morning</h2>
+</div>
+
+<header style="display:flex; justify-content:space-between; padding:12px 20px; font-weight:700;">
+  <div onclick="window.location='/submissions'" style="cursor:pointer;">📄 My Submissions</div>
+  <div onclick="window.open('https://gatewayleasingauto.com','_blank')" style="cursor:pointer;">Gateway Leasing</div>
+</header>
+
+<h2>Vehicle Appraisal</h2>
+
+<form method="POST" enctype="multipart/form-data">
+  <input type="text" name="dealer_name" id="dealer_name" placeholder="Dealer Name" required><br>
+  <input type="text" name="vin" id="vin" placeholder="Enter VIN or Scan" required><br>
+  <div id="vin-preview"></div>
+
+  <input type="text" name="distance" placeholder="Kilometres" required><br>
+
+  <input type="email" name="user_email" id="user_email" placeholder="Email Address"><br>
+  <label><input type="checkbox" name="send_copy" checked> Send me a copy by email</label><br>
+
+  <label>Upload Photos (up to 12)</label>
+  <input type="file" name="photos" multiple accept="image/*" capture="environment"><br>
+
+  <textarea name="notes" placeholder="Additional Notes"></textarea><br>
+
+  <button type="submit">Submit</button>
+</form>
+
+<script>
+function setGreeting(){
+  let h = new Date().getHours();
+  let greeting = h < 12 ? "Good Morning" : (h < 17 ? "Good Afternoon" : "Good Evening");
+  document.getElementById('greeting').innerText = greeting;
+}
+setGreeting();
+setTimeout(()=>{ document.getElementById('splash').classList.add('hidden'); },2000);
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  if(localStorage.getItem('dealer_name')) document.getElementById('dealer_name').value = localStorage.getItem('dealer_name');
+  if(localStorage.getItem('user_email')) document.getElementById('user_email').value = localStorage.getItem('user_email');
+});
+document.querySelector('form').addEventListener('submit', ()=>{
+  localStorage.setItem('dealer_name', document.getElementById('dealer_name').value);
+  localStorage.setItem('user_email', document.getElementById('user_email').value);
+});
+</script>
+</body>
+</html>
