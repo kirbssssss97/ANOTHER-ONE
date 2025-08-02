@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html><head><title>Admin Dashboard</title></head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;">
+<h2>Admin Dashboard</h2>
+<a href="/logout">Logout</a>
+{% for vin, entries in vin_history.items() %}
+{% for entry in entries %}
+<div style="margin:10px;padding:10px;border:1px solid #ddd;border-radius:10px;">
+<strong>{{ vin }}</strong> - {{ entry.kms }} kms - {{ entry.date }}<br>
+{% if entry.email %}📩 {{ entry.email }}{% endif %}
+</div>
+{% endfor %}
+{% endfor %}
+</body></html>
